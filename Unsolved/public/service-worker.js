@@ -21,3 +21,20 @@ self.addEventListener("install", function(evt) {
     );
     self.clients.claim();
 });
+// fetching cache data
+self.addEventListener("fetch", evt => {
+    if(evt.request.url.includes("/api/")) {
+        console.log("[Service Worker]", fetch(data), evt.request.url);
+    }
+    evt.respondWith(
+        caches.open(DATA_CACHE_NAME).then(cache => {
+            return fetch(evt.request).then(response => {
+                if(response.status === 200) {
+                    
+                }
+            })
+        })
+    )
+
+
+})
