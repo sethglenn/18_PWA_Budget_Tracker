@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 let db;
 const request = indexedDB.open("budget", 1);
 
@@ -40,7 +42,16 @@ function checkDatabase() {
                     "Content-Type": "application/json"
                 }
             })
-            .then()
+            .then(response => response.json())
+            .then(() => {
+                const transaction = db.transaction(["pending"], "readwrite");
+                const store = transaction.objectStore("pending");
+                store.clear();
+            });
         }
-    }
+    };
+}
+
+function deletePending() {
+    
 }
