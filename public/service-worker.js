@@ -6,6 +6,18 @@ const CACHE_NAME = "static-cache-v2";
 const DATA_CACHE_NAME = "data-cache-v1";
 
 // installation
+self.addEventListener("install", function(etv) {
+    evt.waitUntil(
+        caches.open(CACHE_NAME).then(cache => {
+            console.log("Files pre-cached suscessfully!");
+            return cache.addAll(FILES_TO_CACHE);
+        })
+    )
+    self.skipWaiting();
+})
+
+
+//  activation
 self.addEventListener("install", function (evt) {
     evt.waitUntil(
         caches.keys().then(keyList => {
