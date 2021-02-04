@@ -6,7 +6,11 @@
 
 ## Description
 
+This app utilized caching and fetch methods to run the app when offline. If not connected to a network, the application is still fully fuctional using DB indexing to store and persist site data.
+
 ## Usage
+
+Navigate to the applications tab in the developer console. Put the site in offline mode. You can save and track budget information all from within the browser.
 
 ## Link
 
@@ -14,7 +18,7 @@ Deployed Application:
 
 ## Images
 
-![Screenshot01](./screenshot1.png)
+![Screenshot01](./public/screenshot1.png)
 
 ## Questions
 
