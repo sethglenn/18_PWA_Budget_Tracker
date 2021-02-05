@@ -3,20 +3,21 @@ let db;
 const request = indexedDB.open("budget", 1);
 
 request.onupgradeneeded = function (event) {
-    const db = event.target.results;
-    db.createObjectStore("pending", { autoIncrement: true});
+    const db = event.target.result;
+    db.createObjectStore("pending", { autoIncrement: true });
 };
 
 request.onsuccess = function (event) {
-    db = event.target.request;
+    db = event.target.result;
 
+    // check if app is online before reading from db
     if (navigator.onLine) {
         checkDatabase();
     }
 };
 
 request.onerror = function (event) {
-    console.log("Error: >>" + event.target.errorCode);
+    console.log("Error: >> " + event.target.errorCode);
 };
 
 function saveRecord(record) {
@@ -27,7 +28,7 @@ function saveRecord(record) {
 }
 
 function checkDatabase() {
-    const transaction = db.transaction(["pending", "readwrite"]);
+    const transaction = db.transaction(["pending"], "readwrite");
     const store = transaction.objectStore("pending");
     const getAll = store.getAll();
 
@@ -41,20 +42,21 @@ function checkDatabase() {
                     "Content-Type": "application/json"
                 }
             })
-            .then(response => response.json())
-            .then(() => {
-                const transaction = db.transaction(["pending"], "readwrite");
-                const store = transaction.objectStore("pending");
-                store.clear();
-            });
+                .then(response => response.json())
+                .then(() => {
+                    // delete records if successful
+                    const transaction = db.transaction(["pending"], "readwrite");
+                    const store = transaction.objectStore("pending");
+                    store.clear();
+                });
         }
     };
 }
-
 function deletePending() {
     const transaction = db.transaction(["pending"], "readwrite");
     const store = transaction.objectStore("pending");
-    store.clear();    
+    store.clear();
 }
 
+// listen for app coming back online
 window.addEventListener("online", checkDatabase);
